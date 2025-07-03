@@ -1,0 +1,364 @@
+{
+	"info": {
+		"_postman_id": "016722d8-5f9e-4648-9053-e6b6fbda39e7",
+		"name": "Transmedia APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18349411"
+	},
+	"item": [
+		{
+			"name": "Add a new list",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    var list_id = jsonData.id;\r",
+							"    pm.environment.set(\"list_id\", list_id);\r",
+							"} catch (e) {\r",
+							"    console.error(e);\r",
+							"}\r",
+							"\r",
+							"// Validate Successful POST request\r",
+							"pm.test(\"TC01: Successful POST request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+							"});\r",
+							"\r",
+							"// Validate response time\r",
+							"pm.test(\"TC02: Response time is less than 100ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);\r",
+							"});\r",
+							"//Response is JSON format:\r",
+							"pm.test(\"TC03: Response is JSON format\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"// Validate response body structure\r",
+							"pm.test(\"TC04: Response body has the required properties\", function () {\r",
+							"    pm.expect(jsonData).to.have.all.keys('boardId', 'name', 'order', 'created', 'id');\r",
+							"});\r",
+							"\r",
+							"// Check that created date is today's date:\r",
+							"pm.test(\"TC05: Created date is today's date\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    const today = new Date().toISOString().slice(0, 10);\r",
+							"    pm.expect(jsonData.created).to.eql(today);\r",
+							"});\r",
+							"\r",
+							"// Validate the response json schema \r",
+							"var schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"boardId\": {\r",
+							"            \"type\": \"integer\"\r",
+							"        },\r",
+							"        \"name\": {\r",
+							"            \"type\": \"string\"\r",
+							"        },\r",
+							"        \"order\": {\r",
+							"            \"type\": \"integer\"\r",
+							"        },\r",
+							"        \"created\": {\r",
+							"            \"type\": \"string\"\r",
+							"        },\r",
+							"        \"id\": {\r",
+							"            \"type\": \"integer\"\r",
+							"        }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"boardId\",\r",
+							"        \"name\",\r",
+							"        \"order\",\r",
+							"        \"created\",\r",
+							"        \"id\"\r",
+							"    ]\r",
+							"}\r",
+							"\r",
+							"pm.test('TC06: Validate Response Schema ', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"boardId\": 1,\r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"order\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/lists",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"lists"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"boardId\": 1,\r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"order\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/lists",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"lists"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "x-powered-by",
+							"value": "Express"
+						},
+						{
+							"key": "vary",
+							"value": "Origin, X-HTTP-Method-Override, Accept-Encoding"
+						},
+						{
+							"key": "access-control-allow-credentials",
+							"value": "true"
+						},
+						{
+							"key": "cache-control",
+							"value": "no-store, no-cache, must-revalidate, proxy-revalidate"
+						},
+						{
+							"key": "pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "expires",
+							"value": "0"
+						},
+						{
+							"key": "surrogate-control",
+							"value": "no-store"
+						},
+						{
+							"key": "access-control-expose-headers",
+							"value": "Location"
+						},
+						{
+							"key": "location",
+							"value": "http://localhost:3001/lists/1"
+						},
+						{
+							"key": "x-content-type-options",
+							"value": "nosniff"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "content-length",
+							"value": "93"
+						},
+						{
+							"key": "etag",
+							"value": "W/\"5d-ofDz2/4kDhfNbCjJbvixN21Ys2c\""
+						},
+						{
+							"key": "date",
+							"value": "Thu, 03 Jul 2025 18:19:05 GMT"
+						},
+						{
+							"key": "connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"boardId\": 1,\n    \"name\": \"Edna Funk\",\n    \"order\": 0,\n    \"created\": \"2025-07-04\",\n    \"id\": 1\n}"
+				}
+			]
+		},
+		{
+			"name": "Delete newly created list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validate Status code\r",
+							"pm.test(\"TC01: Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"// Validate response time\r",
+							"pm.test(\"TC02: Response time is less than 100ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);\r",
+							"});\r",
+							"// Validate response format is JSON.\r",
+							"pm.test(\"TC03: Response is JSON format\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"//Try Deleting same list Again Return 404\r",
+							"pm.sendRequest({\r",
+							"    url: `${pm.environment.get(\"base_url\")}/api/lists/${pm.environment.get(\"list_id\")}`,\r",
+							"     method: 'DELETE'\r",
+							"}, function (err, res) {\r",
+							"    pm.test(\"TC04: Deleting again returns 404 or error\", function () {\r",
+							"        pm.expect([404, 400]).to.include(res.code);\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/lists/{{list_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"lists",
+						"{{list_id}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Response",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/lists/{{list_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"lists",
+								"{{list_id}}"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "x-powered-by",
+							"value": "Express"
+						},
+						{
+							"key": "vary",
+							"value": "Origin, Accept-Encoding"
+						},
+						{
+							"key": "access-control-allow-credentials",
+							"value": "true"
+						},
+						{
+							"key": "cache-control",
+							"value": "no-store, no-cache, must-revalidate, proxy-revalidate"
+						},
+						{
+							"key": "pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "expires",
+							"value": "0"
+						},
+						{
+							"key": "surrogate-control",
+							"value": "no-store"
+						},
+						{
+							"key": "x-content-type-options",
+							"value": "nosniff"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "content-length",
+							"value": "2"
+						},
+						{
+							"key": "etag",
+							"value": "W/\"2-vyGp6PvFo4RvsFtPoIWeCReyIC8\""
+						},
+						{
+							"key": "date",
+							"value": "Thu, 03 Jul 2025 18:19:23 GMT"
+						},
+						{
+							"key": "connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{}"
+				}
+			]
+		}
+	]
+}
