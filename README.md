@@ -56,6 +56,7 @@ Use the following command to run the tests and generate an HTML report:
 
 This will generate a detailed HTML report (`newman/Transmedia-APIs-report.html` by default).
 ## 📊 Sample Report Output
+![Test Summary](reports/Newman_Report.png)
 
 The HTML report contains:
 
